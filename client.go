@@ -5,11 +5,20 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
+	"encoding/json"
+	"desafio-client-server-api-fc/entity"
+)
+
+const (
+	serverURL  = "http://localhost:8080/cotacao"
+	outputFile = "cotacao.txt"
+	timeout    = 3000 * time.Millisecond
 )
 
 func main() {
 	 fmt.Println("Client")
-	req, err := http.NewRequest("GET", "http://localhost:8080/cotacao", nil)
+	req, err := http.NewRequest("GET", serverURL, nil)
 	if err != nil {
 		log.Printf("failed to create request: %v", err)
 		return
@@ -25,6 +34,14 @@ func main() {
 		log.Printf("failed to read response: %v", err)
 		return
 	}
-	log.Printf("Response: %s", body)
+	var quote entity.Quote
+    err = json.Unmarshal(body, &quote)
+    if err != nil {
+        log.Printf("failed to unmarshal response: %v", err)
+        return
+    }
+
+    // Access the Bid field
+    fmt.Println("Bid:", quote.Bid)
 }
 

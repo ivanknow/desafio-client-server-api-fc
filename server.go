@@ -17,8 +17,8 @@ const (
 	listenAddr = ":8080"
 	apiURL     = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
 	dbFile     = "cotacao.db"
-	dbTimeout  = 100 * time.Millisecond
-	apiTimeout = 2000 * time.Millisecond
+	dbTimeout  = 10 * time.Millisecond
+	apiTimeout = 200 * time.Millisecond
 )
 
 type apiResponse map[string]entity.Quote

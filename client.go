@@ -16,7 +16,7 @@ import (
 const (
 	serverURL  = "http://localhost:8080/cotacao"
 	outputFile = "cotacao.txt"
-	timeout    = 3000 * time.Millisecond
+	timeout    = 300 * time.Millisecond
 )
 
 func main() {
@@ -28,15 +28,15 @@ func main() {
 
 	req, err := http.NewRequestWithContext(ctx, "GET", serverURL, nil)
 	if err != nil {
-		log.Printf("failed to create request: %v", err)
+		log.Fatalf("failed to create request: %v", err)
 	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		if errors.Is(err, context.DeadlineExceeded) {
-			log.Printf("client timeout: %v", err)
+			log.Fatalf("client timeout: %v", err)
 		}
-		log.Printf("request failed: %v", err)
+		log.Fatalf("request failed: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -47,8 +47,7 @@ func main() {
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("failed to read response: %v", err)
-		return
+		log.Fatalf("failed to read response: %v", err)
 	}
 
 	var quote entity.Quote
